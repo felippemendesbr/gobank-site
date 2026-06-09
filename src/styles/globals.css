@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*Start Scrollbar*/
+.scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: #3a3a3a;
+  border-radius: 100px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #00db87;
+  border-radius: 100px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/*End Scrollbar*/
+
+/*Start Slide Blog*/
+@keyframes slide {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-1800px); /* Ajuste conforme a largura do seu conteúdo */
+  }
+}
+
+.infiniteSlide {
+  animation-name: slide;
+  animation-duration: 30s; /* ajuste conforme necessário */
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.infiniteSlide:hover {
+  animation-play-state: paused;
+}
+
+/*End Slide Blog*/
+
+.backgroundWithZoomAndRotationEffect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: url('/public/images/background.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  transition: transform 0.3s ease;
+}
+
+/*-*/
+
+@keyframes bg-white-este-e-o-jeito-1 {
+  0%,
+  33.33%,
+  66.66%,
+  100% {
+    background-color: transparent;
+  }
+  8.33%,
+  25% {
+    background-color: white;
+  }
+  /* Primeira div branca */
+}
+
+@keyframes bg-white-este-e-o-jeito-2 {
+  0%,
+  33.33%,
+  66.66%,
+  100% {
+    background-color: transparent;
+  }
+  41.66%,
+  58.33% {
+    background-color: white;
+  }
+  /* Segunda div branca */
+}
+
+@keyframes bg-white-este-e-o-jeito-3 {
+  0%,
+  33.33%,
+  66.66%,
+  100% {
+    background-color: transparent;
+  }
+  75%,
+  91.66% {
+    background-color: white;
+  }
+  /* Terceira div branca */
+}
+
+.bg-white-este-e-o-jeito-1 {
+  animation: bg-white-este-e-o-jeito-1 9s infinite; /* Ciclo completo de 9 segundos */
+}
+
+.bg-white-este-e-o-jeito-2 {
+  animation: bg-white-este-e-o-jeito-2 9s infinite;
+}
+
+.bg-white-este-e-o-jeito-3 {
+  animation: bg-white-este-e-o-jeito-3 9s infinite;
+}
+
+.bg-gradiente-post {
+  background: linear-gradient(to top, #1f1f1f 30%, transparent 30%);
+}
+
+.post-content-rendered h1 {
+  font-size: 48px;
+  line-height: initial;
+}
+
+.post-content-rendered h2 {
+  font-size: 42px;
+  line-height: initial;
+}
+
+.post-content-rendered h3 {
+  font-size: 36px;
+  line-height: initial;
+}
+
+.post-content-rendered h4 {
+  font-size: 30px;
+  line-height: initial;
+}
+
+.post-content-rendered h5 {
+  font-size: 24px;
+  line-height: initial;
+}
+
+.post-content-rendered h6 {
+  font-size: 20px;
+  line-height: initial;
+}
+
+.post-content-rendered p {
+  font-size: 18px;
+  line-height: initial;
+}
+
+input[type='radio']:checked + .radio-outer .radio-inner {
+  transform: scale(1);
+}
+
+input[type='radio']:checked + .radio-outer {
+  border-color: #00db87; /* Muda a cor da borda para #00DB87 quando marcado */
+}
+
+input[type='checkbox']:checked + .radio-outer .radio-inner {
+  transform: scale(1);
+}
+
+input[type='checkbox']:checked + .radio-outer {
+  border-color: #00db87; /* Muda a cor da borda para #00DB87 quando marcado */
+}

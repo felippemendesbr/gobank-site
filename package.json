@@ -1,0 +1,45 @@
+{
+  "name": "gobank",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --check --ignore-path .gitignore .",
+    "format:fix": "prettier --write --ignore-path .gitignore ."
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
+    "@next/third-parties": "^14.1.4",
+    "axios": "^1.6.2",
+    "keen-slider": "^6.8.6",
+    "next": "latest",
+    "react": "^18.2.0",
+    "react-dom": "latest",
+    "react-google-recaptcha": "^3.1.0",
+    "react-hook-form": "^7.48.2",
+    "react-icons": "^4.12.0",
+    "react-input-mask": "^2.0.4",
+    "sharp": "^0.33.2",
+    "swiper": "^10.3.1",
+    "yup": "^1.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/react-google-recaptcha": "^2.1.8",
+    "@types/react-input-mask": "^3.0.5",
+    "autoprefixer": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "eslint-config-prettier": "^9.1.0",
+    "postcss": "latest",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.12",
+    "tailwindcss": "latest",
+    "typescript": "latest"
+  }
+}
