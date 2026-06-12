@@ -216,7 +216,7 @@ export default function CentralDeAjuda() {
                   </DropdownFAQ>
                   <DropdownFAQ title='31. A GoCapital está disponível em quais regiões?'>
                     <p className='text-lg text-white'>A GoCapital tem uma cobertura nacional e todas as nossas soluções podem ser contratadas remotamente de onde você estiver no Brasil inteiro.</p>
-                    <p className='text-lg text-white'>Mas, se quiser falar conosco presencialmente, temos três agências localizadas em Guarulhos (SP), Mogi das Cruzes (SP) e Poços de Caldas (MG).</p>
+                    <p className='text-lg text-white'>Mas, se quiser falar conosco presencialmente, temos agências localizadas em Guarulhos, Mogi das Cruzes, Limeira e Taubaté.</p>
                   </DropdownFAQ>
                 </div>
 
@@ -349,7 +349,7 @@ export default function CentralDeAjuda() {
                     </p>
                   </DropdownFAQ>
                   <DropdownFAQ title='28. A GoCapital possui agências físicas em outras localidades além de Guarulhos?'>
-                    <p className='text-lg text-white'>Sim. Fale com nossa equipe e consulte a agência física mais próxima de você. Atualmente temos agências em Guarulhos (matriz), Poços de Caldas e Mogi das Cruzes.</p>
+                    <p className='text-lg text-white'>Sim. Fale com nossa equipe e consulte a agência física mais próxima de você. Atualmente temos agências localizadas em Guarulhos, Mogi das Cruzes, Limeira e Taubaté.</p>
                   </DropdownFAQ>
                   <DropdownFAQ title='30. Estão me ligando em nome da GoCapital pedindo meus dados para abertura de conta e oferecendo crédito mediante pagamento antecipado. É prática comum da GoCapital?'>
                     <p className='text-lg text-white'>Não. A GoCapital não solicita pagamento antecipado para nenhuma operação.</p>
