@@ -413,7 +413,7 @@ export default function TrabalheConosco({ vagas }: IVagas) {
                 {/* Anexar currículo */}
 
                 <div className='mb-8 flex w-full flex-col justify-end gap-5'>
-                  <ReCAPTCHA sitekey='6Lf1YjApAAAAAKk6PqhDNpsG3Avbl7BlsZlDAtP8' onChange={handleRecaptcha} />
+                  <ReCAPTCHA sitekey='6Lc9PBotAAAAAENTOBGIFCZuB-00d61pOb2a-47O' onChange={handleRecaptcha} />
                   {!isRecaptchaValid && <p className='text-red-500'>Por favor, preencha o reCAPTCHA.</p>}
                 </div>
 
