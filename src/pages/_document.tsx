@@ -42,6 +42,8 @@ export default function Document() {
 			<body className='overflow-x-hidden'>
 				<Main />
 				<NextScript />
+				{/* RD Station Marketing */}
+				<script async type='text/javascript' src='https://d335luupugsy2.cloudfront.net/js/loader-scripts/c3b63d6a-2c3e-476a-9f96-7730df0aeefe-loader.js' />
 			</body>
 		</Html>
 	);
