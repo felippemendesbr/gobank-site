@@ -6,13 +6,13 @@ import Link from "next/link";
 
 import { CSSProperties } from "react";
 
+import { WP_API_BASE, fetchWordpressJson } from '@/lib/wordpress';
+
 export async function getStaticProps() {
   try {
-    const res = await fetch(
-      //  'http://localhost:3000/api/posts?per_page=8&page=1'
-      "https://www.gobank.com.br/api/posts?per_page=8&page=1"
+    const posts = await fetchWordpressJson(
+      `${WP_API_BASE}/posts?_embed=true&per_page=8&page=1`,
     );
-    const posts = await res.json();
     return {
       props: {
         initialPosts: Array.isArray(posts) ? posts : [],
@@ -70,15 +70,14 @@ export default function VerTodos({ initialPosts }: any){
         setLoading(true);
         const nextPage = page + 1;
 
-        const res = await fetch(
-            //`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed&per_page=${posts_per_page + 1}&page=${nextPage}`
-            //`/api/posts?per_page=${posts_per_page}&page=${nextPage}`
-            //`http://localhost:3000/api/posts?per_page=${posts_per_page}&page=${nextPage}`
-            `https://www.gobank.com.br/api/posts?per_page=${posts_per_page}&page=${nextPage}`
-        );
+        const res = await fetch(`/api/posts?per_page=${posts_per_page}&page=${nextPage}`);
         const fetchedPosts = await res.json();
 
-        // console.log(fetchedPosts);
+        if (!Array.isArray(fetchedPosts)) {
+            setHasMore(false);
+            setLoading(false);
+            return;
+        }
 
         if (fetchedPosts.length >= posts_per_page) {
             setPosts([...posts, ...fetchedPosts.slice(0, posts_per_page)]);

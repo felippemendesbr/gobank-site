@@ -3,6 +3,7 @@ import { CSSProperties, useEffect, useState } from 'react';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { WP_API_BASE, fetchWordpressJson } from '@/lib/wordpress';
 
 import image1 from '../../public/images/sobre-o-gocapital/1.webp';
 import image10 from '../../public/images/sobre-o-gocapital/10.webp';
@@ -55,12 +56,11 @@ export interface IDepoimentos {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: GetStaticPropsContext) => {
-  const fetchDepoimentos = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/depoimentos?_embed=true&per_page=100`);
-  const depoimentos = await fetchDepoimentos.json();
+  const depoimentos = await fetchWordpressJson(`${WP_API_BASE}/depoimentos?_embed=true&per_page=100`);
 
   return {
     props: {
-      depoimentos,
+      depoimentos: Array.isArray(depoimentos) ? depoimentos : [],
     },
     revalidate: 86400,
   };

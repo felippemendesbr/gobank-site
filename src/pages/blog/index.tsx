@@ -13,7 +13,7 @@ import 'keen-slider/keen-slider.min.css';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import Head from 'next/head';
 
-import { filterPostsWithFeaturedMedia } from '@/lib/wordpress';
+import { WP_API_BASE, fetchWordpressJson, filterPostsWithFeaturedMedia } from '@/lib/wordpress';
 
 const animation = { duration: 150000, easing: (t: number) => t };
 const animationCategorias = { duration: 20000, easing: (t: number) => t };
@@ -42,43 +42,26 @@ export interface IBlog {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: GetStaticPropsContext) => {
-  const postsFetch = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true&per_page=100`);
-  const postsArr = await postsFetch.json();
-  const posts = filterPostsWithFeaturedMedia<TPost>(postsArr);
-
-  const postsFetchDicasDeGestao = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true&per_page=100&categories=4`);
-  const postsArrDicasDeGestao = await postsFetchDicasDeGestao.json();
-  const postsDicasDeGestao = filterPostsWithFeaturedMedia<TPost>(postsArrDicasDeGestao);
-
-  const postsFetchNoticias = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true&per_page=100&categories=5`);
-  const postsArrNoticias = await postsFetchNoticias.json();
-  const postsNoticias = filterPostsWithFeaturedMedia<TPost>(postsArrNoticias);
-
-  const postsFetchSolucoesPareaeEmpreendedores = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true&per_page=100&categories=6`);
-  const postsArrSolucoesPareaeEmpreendedores = await postsFetchSolucoesPareaeEmpreendedores.json();
-  const postsSolucoesPareaeEmpreendedores = filterPostsWithFeaturedMedia<TPost>(postsArrSolucoesPareaeEmpreendedores);
-
-  const postsFetchFinancasParaNegocios = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true&per_page=100&categories=7`);
-  const postsArrFinancasParaNegocios = await postsFetchFinancasParaNegocios.json();
-  const postsFinancasParaNegocios = filterPostsWithFeaturedMedia<TPost>(postsArrFinancasParaNegocios);
-
-  const postsFetchTecnologia = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true&per_page=100&categories=8`);
-  const postsArrTecnologia = await postsFetchTecnologia.json();
-  const postsTecnologia = filterPostsWithFeaturedMedia<TPost>(postsArrTecnologia);
-
-  const postsFetchInvestimentos = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true&per_page=100&categories=3`);
-  const postsArrInvestimentos = await postsFetchInvestimentos.json();
-  const postsInvestimentos = filterPostsWithFeaturedMedia<TPost>(postsArrInvestimentos);
+  const [postsArr, postsArrDicasDeGestao, postsArrNoticias, postsArrSolucoes, postsArrFinancas, postsArrTecnologia, postsArrInvestimentos] =
+    await Promise.all([
+      fetchWordpressJson(`${WP_API_BASE}/posts?_embed=true&per_page=100`),
+      fetchWordpressJson(`${WP_API_BASE}/posts?_embed=true&per_page=100&categories=4`),
+      fetchWordpressJson(`${WP_API_BASE}/posts?_embed=true&per_page=100&categories=5`),
+      fetchWordpressJson(`${WP_API_BASE}/posts?_embed=true&per_page=100&categories=6`),
+      fetchWordpressJson(`${WP_API_BASE}/posts?_embed=true&per_page=100&categories=7`),
+      fetchWordpressJson(`${WP_API_BASE}/posts?_embed=true&per_page=100&categories=8`),
+      fetchWordpressJson(`${WP_API_BASE}/posts?_embed=true&per_page=100&categories=3`),
+    ]);
 
   return {
     props: {
-      posts,
-      postsDicasDeGestao,
-      postsNoticias,
-      postsSolucoesPareaeEmpreendedores,
-      postsFinancasParaNegocios,
-      postsTecnologia,
-      postsInvestimentos,
+      posts: filterPostsWithFeaturedMedia<TPost>(postsArr),
+      postsDicasDeGestao: filterPostsWithFeaturedMedia<TPost>(postsArrDicasDeGestao),
+      postsNoticias: filterPostsWithFeaturedMedia<TPost>(postsArrNoticias),
+      postsSolucoesPareaeEmpreendedores: filterPostsWithFeaturedMedia<TPost>(postsArrSolucoes),
+      postsFinancasParaNegocios: filterPostsWithFeaturedMedia<TPost>(postsArrFinancas),
+      postsTecnologia: filterPostsWithFeaturedMedia<TPost>(postsArrTecnologia),
+      postsInvestimentos: filterPostsWithFeaturedMedia<TPost>(postsArrInvestimentos),
     },
     revalidate: 86400,
   };

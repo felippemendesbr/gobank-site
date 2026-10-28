@@ -6,7 +6,14 @@ import Link from 'next/link';
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next';
 import Head from 'next/head';
 
-import { filterPostsWithFeaturedMedia, getFeaturedMediaUrl, getPrimaryCategory } from '@/lib/wordpress';
+import {
+  WP_API_BASE,
+  fetchWordpressCollection,
+  fetchWordpressJson,
+  filterPostsWithFeaturedMedia,
+  getFeaturedMediaUrl,
+  getPrimaryCategory,
+} from '@/lib/wordpress';
 
 type TPost = {
   excerpt?: {
@@ -33,8 +40,18 @@ interface ISlug {
 export const getStaticProps: GetStaticProps = async ({ params }: GetStaticPropsContext) => {
   const postSlug = params?.slug;
 
-  const postFetch = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true&slug=${postSlug}`);
-  const postsArr = await postFetch.json();
+  const postsArr = await fetchWordpressJson<TPost[]>(`${WP_API_BASE}/posts?_embed=true&slug=${postSlug}`);
+
+  // Temporary WP/HTML failure — retry soon instead of baking a permanent 404 into the build
+  if (postsArr === null) {
+    return {
+      props: {
+        currentPost: [],
+        relatedPosts: [],
+      },
+      revalidate: 60,
+    };
+  }
 
   if (!Array.isArray(postsArr) || !postsArr.length) {
     return { notFound: true };
@@ -46,15 +63,15 @@ export const getStaticProps: GetStaticProps = async ({ params }: GetStaticPropsC
   let relatedPosts: TPost[] = [];
 
   if (categoryId) {
-    const allPostsFetch = await fetch(
-      `https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true&categories=${categoryId}&per_page=100`,
+    // UI only renders 3 related posts — keep payload small and reduce WP rate-limit risk during build
+    const allPostsArr = await fetchWordpressJson<TPost[]>(
+      `${WP_API_BASE}/posts?_embed=true&categories=${categoryId}&per_page=6`,
     );
-    const allPostsArr = await allPostsFetch.json();
 
     if (Array.isArray(allPostsArr)) {
       relatedPosts = filterPostsWithFeaturedMedia<TPost>(
-        allPostsArr.filter((post: { id: unknown }) => post.id !== currentPost.id),
-      );
+        allPostsArr.filter((post) => post.id !== currentPost.id),
+      ).slice(0, 3);
     }
   }
 
@@ -68,19 +85,19 @@ export const getStaticProps: GetStaticProps = async ({ params }: GetStaticPropsC
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const totalPostsFetch = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true`);
-  const totalPosts = await totalPostsFetch.headers.get('x-wp-total');
+  const { total } = await fetchWordpressCollection(`${WP_API_BASE}/posts?_embed=true&per_page=1`);
+  const perPage = total > 0 ? total : 100;
+  const { data: postsArr } = await fetchWordpressCollection(
+    `${WP_API_BASE}/posts?_embed=true&per_page=${perPage}`,
+  );
 
-  const postsFetch = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true&per_page=${totalPosts}`);
-  const postsArr = await postsFetch.json();
-
-  const paths = await postsArr.map((post: any) => {
-    return {
+  const paths = postsArr
+    .filter((post: { slug?: string }) => Boolean(post?.slug))
+    .map((post: { slug: string }) => ({
       params: {
         slug: post.slug,
       },
-    };
-  });
+    }));
 
   return {
     paths,
@@ -119,6 +136,19 @@ export default function Slug({ currentPost, relatedPosts }: ISlug) {
     height: '101%',
     zIndex: -1,
   };
+
+  if (!currentPost?.length) {
+    return (
+      <>
+        <Head>
+          <title>Post indisponível | GoCapital</title>
+        </Head>
+        <main className='flex min-h-[50vh] items-center justify-center bg-[#1F1F1F] px-5'>
+          <p className='text-center text-2xl text-white'>Este conteúdo está temporariamente indisponível. Tente novamente em instantes.</p>
+        </main>
+      </>
+    );
+  }
 
   return (
     <>

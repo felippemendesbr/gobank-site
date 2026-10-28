@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Inter } from 'next/font/google';
 import { GetStaticProps } from 'next';
+import { WP_API_BASE, fetchWordpressJson } from '@/lib/wordpress';
 
 import blogCardArrow from '../../public/svgs/blog-card-arrow.svg';
 import buttonWhiteArrow from '../../public/svgs/button-white-arrow.svg';
@@ -74,8 +75,7 @@ const hasFeaturedMedia = (post: TPost) =>
   Boolean(post._embedded?.['wp:featuredmedia']?.[0]?.source_url);
 
 export const getStaticProps: GetStaticProps = async () => {
-  const postsFetch = await fetch(`https://admin.gobank.com.br/wp-json/wp/v2/posts?_embed=true&per_page=100`);
-  const postsArr = await postsFetch.json();
+  const postsArr = await fetchWordpressJson(`${WP_API_BASE}/posts?_embed=true&per_page=100`);
   const posts = Array.isArray(postsArr) ? postsArr.filter(hasFeaturedMedia) : [];
 
   return {
